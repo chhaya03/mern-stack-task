@@ -13,12 +13,32 @@ export default async function Products({
 }: {
   searchParams?: { [key: string]: string | string[] | undefined };
 }) {
-  const { page = 1, pageSize = DEFAULT_PAGE_SIZE } = searchParams as any;
+  const {
+  page = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  sortBy,
+  brand,
+  category,
+  gender,
+  occasion,
+  discount,
+} = searchParams as any;
 
-  const { products, lastPage, numOfResultsOnCurPage } = await getProducts(
-    +page,
-    +pageSize
-  );
+
+const { products, lastPage, numOfResultsOnCurPage } = await getProducts(
+  +page,
+  +pageSize,
+  sortBy,
+  {
+    brand,
+    category,
+    gender,
+    occasion,
+    discount,
+  }
+);
+
+
 
   const brands = await getBrands();
   const categories = await getCategories();

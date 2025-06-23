@@ -1,7 +1,6 @@
 //@ts-nocheck
 
 "use client";
-
 import { basicSchema } from "@/schemas/product";
 import { getCategories } from "@/actions/categoryActions";
 import { getBrands } from "@/actions/brandActions";
@@ -9,7 +8,7 @@ import {
   MapBrandIdsToName,
   getProduct,
   getProductCategories,
-  updateProduct,
+  updateProducts,
   updateProductCategories,
 } from "@/actions/productActions";
 import { useFormik } from "formik";
@@ -60,9 +59,43 @@ function EditProduct({ params }: { params: { id: string } }) {
     },
     validationSchema: basicSchema,
 
-    onSubmit: async (values, actions) => {
-      alert("Please update the code.");
-    },
+   onSubmit: async (values, actions) => {
+  try {
+    const updatedProduct: UpdateProducts = {
+  name: values.name,
+  description: values.description,
+  old_price: Number(values.old_price),
+  discount: Number(values.discount),
+  colors: values.colors,
+  gender: values.gender,
+  rating: Number(values.rating),
+  brands: JSON.stringify(values.brands.map((b) => b.value)),
+  occasion: values.occasion.map((o) => o.value).join(","),
+  ...(values.image_url && { image_url: values.image_url }) 
+};
+
+
+    
+    const res = await updateProduct(+id, updatedProduct);
+    if (res?.error) {
+      toast.error("Failed to update product.");
+      return;
+    }
+
+
+    const selectedCategoryIds = values.categories.map((cat) => cat.value);
+    await updateProductCategories(+id, selectedCategoryIds);
+
+    toast.success("Product updated successfully!");
+    router.push("/products");
+  } catch (err) {
+    console.error(err);
+    toast.error("Something went wrong while updating.");
+  } finally {
+    actions.setSubmitting(false);
+  }
+},
+
   });
 
   // throw new Error("Function not implemented.");

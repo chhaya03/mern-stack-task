@@ -41,9 +41,32 @@ function AddProduct() {
     },
     validationSchema: basicSchema,
 
-    onSubmit: async (values: any, actions) => {
-      alert("Please Update the Code");
-    },
+   onSubmit: async (values: any, actions) => {
+  try {
+    const res = await fetch("/api/products", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
+
+    const data = await res.json();
+
+    if (data.success) {
+      alert("Product added successfully!");
+      resetForm(); 
+      router.push("/products"); 
+    } else {
+      alert("Failed to add product: " + data.error);
+    }
+  } catch (err) {
+    console.error("Error submitting product:", err);
+    alert("Something went wrong.");
+  }
+},
+
+
   });
 
   useEffect(() => {

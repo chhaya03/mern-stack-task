@@ -9,30 +9,94 @@ import { revalidatePath } from "next/cache";
 import { authOptions } from "@/utils/authOptions";
 import { cache } from "react";
 
-export async function getProducts(pageNo = 1, pageSize = DEFAULT_PAGE_SIZE) {
+export async function getProducts(
+  pageNo = 1,
+  pageSize = DEFAULT_PAGE_SIZE,
+  sortBy = "",
+  filters = {}
+) {
   try {
-    let products;
     let dbQuery = db.selectFrom("products").selectAll("products");
 
-    const { count } = await dbQuery
-      // .select(sql`COUNT(DISTINCT products.id) as count`)
+    // Apply sorting
+    if (sortBy && typeof sortBy === "string" && sortBy.includes("-")) {
+      const [column, direction] = sortBy.split("-");
+      const validColumns = ["price", "created_at", "rating"];
+      const validDirections = ["asc", "desc"];
+
+      if (validColumns.includes(column) && validDirections.includes(direction)) {
+        dbQuery = dbQuery.orderBy(column, direction);
+      }
+    }
+
+    
+    if (filters.brand) {
+      const brandIds = Array.isArray(filters.brand)
+        ? filters.brand.map(Number)
+        : [Number(filters.brand)];
+      dbQuery = dbQuery.where("brand_id", "in", brandIds);
+    }
+
+    if (filters.gender) {
+      const genders = Array.isArray(filters.gender)
+        ? filters.gender
+        : [filters.gender];
+      dbQuery = dbQuery.where("gender", "in", genders);
+    }
+
+    if (filters.occasion) {
+      const occasions = Array.isArray(filters.occasion)
+        ? filters.occasion
+        : [filters.occasion];
+      dbQuery = dbQuery.where("occasion", "in", occasions);
+    }
+
+    if (filters.discount) {
+      const discountThreshold = Number(filters.discount);
+      if (!isNaN(discountThreshold)) {
+        dbQuery = dbQuery.where("discount", ">=", discountThreshold);
+      }
+    }
+
+    // Filter by category through product_categories table (needs join)
+    if (filters.category) {
+      const categoryIds = Array.isArray(filters.category)
+        ? filters.category.map(Number)
+        : [Number(filters.category)];
+
+      dbQuery = dbQuery
+        .innerJoin("product_categories", "products.id", "product_categories.product_id")
+        .where("product_categories.category_id", "in", categoryIds)
+        .distinct(); // Prevent duplicates
+    }
+
+    // Get count
+    const { count } = await db
+      .selectFrom("products")
+      .select(sql`COUNT(*)`.as("count"))
       .executeTakeFirst();
 
-    const lastPage = Math.ceil(count / pageSize);
+    const lastPage = Math.ceil(Number(count?.count || 0) / pageSize);
 
-    products = await dbQuery
-      .distinct()
+    const products = await dbQuery
       .offset((pageNo - 1) * pageSize)
       .limit(pageSize)
       .execute();
 
     const numOfResultsOnCurPage = products.length;
 
-    return { products, count, lastPage, numOfResultsOnCurPage };
+    return {
+      products,
+      count: Number(count?.count || 0),
+      lastPage,
+      numOfResultsOnCurPage,
+    };
   } catch (error) {
     throw error;
   }
 }
+
+
 
 export const getProduct = cache(async function getProduct(productId: number) {
   // console.log("run");
@@ -145,3 +209,5 @@ export async function getProductCategories(productId: number) {
     throw error;
   }
 }
+
+

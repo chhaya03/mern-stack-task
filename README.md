@@ -26,45 +26,84 @@ To set up the project locally, follow these steps:
 
 #### Project Setup
 
-1. **Project Setup**: Ensure proper project setup as per the provided instructions.
+# Clone the repo
 
-#### Pagination for products
+git clone https://github.com/your-username/product-management-app.git
+cd product-management-app
 
-2. **Main Section**: Display a paginated list of product in the main section.
+# Install dependencies
 
-#### Product Sorting and Filtering
+npm install
 
-3. **Product Sorting**: Implement options for sorting products based on price, creation date (created_at), and rating.
-4. **Brand Filter**: Enable product filtering by the chosen brand and emphasize the selected brands within the respective tab.
-5. **Category Filter**: Allow product filtering by the selected category and highlight the chosen category within its designated tab.
-6. **Price Range Filter**: Provide the ability to filter products based on the selected price range and highlight the chosen range within its dedicated tab.
-7. **Occasion Filter**: Enable product filtering based on the selected occasion and highlight the chosen occasion within its specific tab.
-8. **Discount Filter**: Implement product filtering based on the selected discount and highlight the chosen discount within its dedicated tab.
-9. **URL Parameters**: Store all filter and sort options in the URL parameters to replicate the user's browsing state when sharing URLs.
+# Set up environment variables if any
 
-#### Product Operations (Create/Edit/Delete)
+# Example: touch .env and add DB_URL, API_KEY etc.
 
-10. **Create Product**: Allow users to crete product.
-11. **Edit Product**: Allow users to modify specific product details.
-12. **Delete Product**: Provide the functionality to remove a particular product from the list.
+# Run development server
 
-### Delivery Expectations
+npm run dev
 
-1. **Code Repository**: Push the code to a public GitHub repository.
-2. **Documentation**: Provide well-documented code with a comprehensive README file.
-3. **Setup Instructions**: Include clear instructions on how to set up and run the project.
-4. **Application Demo**: Record a video demonstrating the application's functionality.
+# 🛍️ Product Management App
 
-### Evaluation Criteria
+A full-featured Product Management web application where users can **Filter**,**Pagination** and **Sort** **Add**, **Edit**, **Delete** products. Built as part of an assessment round to showcase frontend + backend development skills using the **MERN stack + SQL** integration.
 
-Candidates will be evaluated based on the following criteria:
+---
 
-1. **Functionality**: Does the application meet all specified requirements?
-2. **Code Quality**: Is the code well-structured, readable, and maintainable?
-3. **Documentation**: Is the codebase well-documented with clear instructions?
-4. **User Experience**: Does the application provide a smooth and intuitive user experience?
-5. **Technical Proficiency**: How effectively does the candidate utilize relevant technologies and APIs?
-6. **Delivery Quality**: Does the candidate deliver all expected deliverables with high quality?
+## 🚀 Features
+
+✅ Pagination support  
+✅ Add new products with details
+✅ Sort products by Rating, Price, Discount  
+✅ Filter products by Category, Brand, Gender, Occasion  
+✅ Upload product image (simulated)  
+✅ Form validation with Formik + Yup  
+✅ Edit product details with pre-filled form  
+✅ Delete products with confirmation  
+✅ Responsive, accessible UI  
+✅ Toast notifications on actions  
+✅ SQL-based data fetching and mutations
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 14 (App Router), React, Tailwind CSS, Formik, React-Select, Toastify
+- **Backend**: SQL (via Kysely), Server Actions (`"use server"`)
+- **Validation**: Yup Schema
+- **State Management**: React hooks
+- **Dev Tools**: TypeScript, ESLint, Prettier
+
+---
+
+## 📂 Project Structure
+
+src/
+│
+├── app/ # Next.js routes
+│ ├── products/ # Product listing, add/edit pages
+│
+├── components/ # Reusable UI components
+│ ├── ProductTable.tsx
+│ ├── ProductRow.tsx
+│ ├── DeleteProduct.tsx
+│
+├── actions/ # Server actions (fetch, update, delete)
+│
+├── db/ # Database config & queries
+│
+├── schemas/ # Yup validation schema
+│
+└── utils/ # Utility functions (e.g. currency formatting)
+
+##🧪 Testing
+
+✅ Delete product → Should update the list with toast confirmation
+
+✅ Filters and sort should reflect in URL and update UI instantly
+
+✅ Add product → Should redirect to /products
+
+✅ Edit product → Should reflect updated fields
 
 ## Conclusion
 

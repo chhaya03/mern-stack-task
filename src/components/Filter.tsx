@@ -125,46 +125,79 @@ function Filter({ categories, brands }) {
     }
   }, [sliderValue]);
 
-  function handleBrandsSelect(e) {
-    alert("Please update the code.");
+  function handleBrandsSelect(selected) {
+  const selectedIds = selected.map((item) => item.value).join(",");
+  searchParams.set("brandId", selectedIds);
+  searchParams.delete("page"); 
+  router.push(`/products?${searchParams.toString()}`, { scroll: false });
+}
+
+
+ function handleCategoriesSelected(selected) {
+  const selectedIds = selected.map((item) => item.value).join(",");
+  searchParams.set("categoryId", selectedIds);
+  searchParams.delete("page");
+  router.push(`/products?${searchParams.toString()}`, { scroll: false });
+}
+
+
+ function handleSlider(e) {
+  const value = e.target.value;
+  setSliderValue(value);
+  setSliderChanged(true);
+}
+
+
+ const handleGenderChange = (e) => {
+  const value = e.target.value;
+  searchParams.set("gender", value);
+  searchParams.delete("page");
+  router.push(`/products?${searchParams.toString()}`, { scroll: false });
+};
+
+
+ function handleOccasions(selected) {
+  const selectedValues = selected.map((item) => item.value).join(",");
+  searchParams.set("occasions", selectedValues);
+  searchParams.delete("page");
+  router.push(`/products?${searchParams.toString()}`, { scroll: false });
+}
+
+
+  function handleDiscount(selected) {
+  const value = selected?.value || "";
+  if (value) {
+    searchParams.set("discount", value);
+  } else {
+    searchParams.delete("discount");
   }
+  searchParams.delete("page");
+  router.push(`/products?${searchParams.toString()}`, { scroll: false });
+}
 
-  function handleCategoriesSelected(e) {
-    alert("Please update the code.");
-  }
 
-  function handleSlider(e) {
-    alert("Please update the code.");
-  }
+function handleClearAll() {
+  const keysToClear = [
+    "categoryId",
+    "brandId",
+    "priceRangeTo",
+    "gender",
+    "occasions",
+    "discount",
+    "page",
+    "pageSize"
+  ];
+  keysToClear.forEach((key) => searchParams.delete(key));
+  router.push(`/products?${searchParams.toString()}`);
+}
 
-  const handleGenderChange = (e) => {
-    alert("Please update the code.");
-  };
-
-  function handleOccasions(e) {
-    alert("Please update the code.");
-  }
-
-  function handleDiscount(e) {
-    alert("Please update the code.");
-  }
-
-  // function handleClearAll() {
-  //   searchParams.delete("categoryId");
-  //   searchParams.delete("brandId");
-  //   searchParams.delete("priceRangeTo");
-  //   searchParams.delete("gender");
-  //   searchParams.delete("occasions");
-  //   searchParams.delete("discount");
-  //   router.push(`/products?${searchParams.toString()}`);
-  // }
 
   return (
     <div className="w-full">
-      {/* <button className="bg-white p-2 my-4 text-black" onClick={handleClearAll}>
+       <button className="bg-white p-2 my-4 text-black" onClick={handleClearAll}>
         Clear All
-      </button> */}
-      {/* <p className="text-lg">Filter By</p> */}
+      </button> 
+      <p className="text-lg">Filter By</p>
       <div className="w-1/4 flex  items-center gap-4 mb-4">
         <span>Brands</span>
         <Select
