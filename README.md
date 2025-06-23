@@ -10,20 +10,6 @@ https://github.com/enacton-tech/mern-stack-task
 
 https://app.usebubbles.com/kG9NjR5kqBCssXm1yA5dZt/mernstack-interview-task-walkthrough
 
-### Setting Up the Project
-
-To set up the project locally, follow these steps:
-
-1. Clone the repository and navigate to the project folder.
-2. Import the product_database.sql file in to your MySQL database (you can use phpMyAdmin).
-3. Update the .env file with your own MySQL credentials.
-4. Run `npm install --force`.
-5. Start the project using `npm run dev`.
-6. Access the NextJS website at http://localhost:3000.
-7. Setup the database, You would need mysql and workbench for the database. You can get it from here: https://dev.mysql.com/downloads/installer. To Import data in do refer to this document: https://dev.mysql.com/doc/workbench/en/wb-admin-export-import-management.html
-
-### Requirements
-
 #### Project Setup
 
 # Clone the repo
@@ -31,17 +17,18 @@ To set up the project locally, follow these steps:
 git clone https://github.com/your-username/product-management-app.git
 cd product-management-app
 
-# Install dependencies
+## Install dependencies
 
 npm install
 
-# Set up environment variables if any
+ Set up environment variables if any
+ set sql credential in .env
 
-# Example: touch .env and add DB_URL, API_KEY etc.
-
-# Run development server
+## Run development server
 
 npm run dev
+
+
 
 # 🛍️ Product Management App
 
